@@ -4,20 +4,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * select what type of parameter it is if it is png, html, jpg, css or 
- * javascript
+ * select what type of parameter it is if it is png, html, jpg, css, 
+ * javascript or ico
  * 
  * @author vashi
  */
 public class ResourceChooser {
 
-    public static Map<String, ResourceWriter> selector = new HashMap<String, ResourceWriter>() {
+    public static Map<String, ResourceWriter> type = new HashMap<String, ResourceWriter>() {
         {
             put("html", new TextWriter("html"));
             put("png", new ImageWriter("png"));
             put("jpg", new ImageWriter("jpg"));
             put("js", new TextWriter("javascript"));
             put("css", new TextWriter("css"));
+            put("ico", new ImageWriter("ico"));
         }
     };
 
@@ -36,10 +37,10 @@ public class ResourceChooser {
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new Exception(" No es una peticion de Recurso Especifico/ Peticion mal formada");
         }
-        if (!selector.containsKey(resource)) {
+        if (!type.containsKey(resource)) {
             throw new Exception("Recurso no soportado: " + resource);
         }
-        return selector.get(resource);
+        return type.get(resource);
     }
 
 }
