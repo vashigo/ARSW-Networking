@@ -1,0 +1,45 @@
+package edu.escuelaing.arsw.servidorWeb.reader;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * select what type of parameter it is if it is png, html, jpg, css or 
+ * javascript
+ * 
+ * @author vashi
+ */
+public class ResourceChooser {
+
+    public static Map<String, ResourceWriter> selector = new HashMap<String, ResourceWriter>() {
+        {
+            put("html", new TextWriter("html"));
+            put("png", new ImageWriter("png"));
+            put("jpg", new ImageWriter("jpg"));
+            put("js", new TextWriter("javascript"));
+            put("css", new TextWriter("css"));
+        }
+    };
+
+    /**
+     * method responsible for interpreting and writing the resource
+     * 
+     * @param path
+     * @return
+     * @throws Exception 
+     */
+    public static ResourceWriter choose(String path) throws Exception {
+        String resource = "";
+        try {
+            String[] s = path.split("\\.");
+            resource = s[s.length - 1];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new Exception(" No es una peticion de Recurso Especifico/ Peticion mal formada");
+        }
+        if (!selector.containsKey(resource)) {
+            throw new Exception("Recurso no soportado: " + resource);
+        }
+        return selector.get(resource);
+    }
+
+}
